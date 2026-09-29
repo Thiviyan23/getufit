@@ -27,7 +27,7 @@ public class PageController {
 
     @GetMapping("/")
     public String home() {
-        return "redirect:/classes";
+        return "index";
     }
 
     @GetMapping("/classes")

@@ -1,9 +1,11 @@
 package com.getufit.controller;
 
 import com.getufit.model.GymClass;
+import com.getufit.model.Trainer;
 import com.getufit.repository.ClassRegistrationRepository;
 import com.getufit.repository.GymClassRepository;
 import com.getufit.repository.MemberRepository;
+import com.getufit.repository.TrainerRepository;
 import com.getufit.service.RegistrationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -24,6 +26,7 @@ public class PageController {
     private final MemberRepository members;
     private final GymClassRepository classes;
     private final ClassRegistrationRepository registrations;
+    private final TrainerRepository trainers;
 
     @GetMapping("/")
     public String home() {
@@ -37,8 +40,13 @@ public class PageController {
         for (GymClass c : list) {
             seats.put(c.getClassID(), c.getCapacity() - registrations.countByGymClass_ClassIDAndStatus(c.getClassID(), "Registered"));
         }
+        Map<Long, String> trainerNames = new HashMap<>();
+        for (Trainer t : trainers.findAll()) {
+            trainerNames.put(t.getTrainerID(), t.getTrainerName());
+        }
         model.addAttribute("classes", list);
         model.addAttribute("seats", seats);
+        model.addAttribute("trainerNames", trainerNames);
         model.addAttribute("members", members.findAll());
         model.addAttribute("memberId", memberId);
         return "classes";

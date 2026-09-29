@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Get U Fit - Trainer Classes</title>
+    <style>
+        body{margin:0;font-family:Arial,sans-serif;background:#f5f5f6;color:#111}
+        header{background:#000;color:#fff;padding:18px 40px;font-size:22px;font-weight:bold}
+        header span{color:#D4145A}
+        main{max-width:1000px;margin:32px auto;padding:0 20px}
+        table{width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden}
+        th,td{padding:14px;text-align:left;border-bottom:1px solid #eee}
+        th{background:#000;color:#fff}
+        .btn{background:#D4145A;color:#fff;padding:8px 16px;border-radius:20px;text-decoration:none;font-size:14px}
+        a{color:#D4145A}
+    </style>
+</head>
+<body>
+<header><a href="/" style="color:#fff;text-decoration:none">Get U <span>Fit</span></a></header>
+<main>
+    <h2>Classes of <span th:text="${trainer.trainerName}"></span></h2>
+    <p th:text="${trainer.specialization}"></p>
+    <a th:href="@{/trainers}">Back to trainers</a>
+    <br><br>
+    <table>
+        <tr><th>Class</th><th>Date</th><th>Time</th><th>Type</th><th>Booked</th><th></th></tr>
+        <tr th:each="c : ${classes}">
+            <td th:text="${c.className}"></td>
+            <td th:text="${c.classDate}"></td>
+            <td th:text="${c.startTime + ' - ' + c.endTime}"></td>
+            <td th:text="${c.classType}"></td>
+            <td th:text="${booked[c.classID] + ' / ' + c.capacity}"></td>
+            <td><a class="btn" th:href="@{/trainers/{tid}/classes/{cid}(tid=${trainer.trainerID},cid=${c.classID})}">View members</a></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(classes)}"><td colspan="6">No classes assigned to this trainer.</td></tr>
+    </table>
+</main>
+</body>
+</html>

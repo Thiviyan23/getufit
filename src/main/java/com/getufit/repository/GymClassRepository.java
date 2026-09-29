@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface GymClassRepository extends JpaRepository<GymClass, Long> {
     List<GymClass> findByClassDateGreaterThanEqualOrderByClassDateAscStartTimeAsc(LocalDate date);
+    boolean existsByTrainerIDAndClassDateGreaterThanEqual(Long trainerID, LocalDate date);
+    List<GymClass> findByTrainerIDOrderByClassDateAscStartTimeAsc(Long trainerID);
 }

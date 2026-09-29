@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Get U Fit - Class Members</title>
+    <style>
+        body{margin:0;font-family:Arial,sans-serif;background:#f5f5f6;color:#111}
+        header{background:#000;color:#fff;padding:18px 40px;font-size:22px;font-weight:bold}
+        header span{color:#D4145A}
+        main{max-width:1000px;margin:32px auto;padding:0 20px}
+        table{width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden}
+        th,td{padding:14px;text-align:left;border-bottom:1px solid #eee}
+        th{background:#000;color:#fff}
+        a{color:#D4145A}
+    </style>
+</head>
+<body>
+<header><a href="/" style="color:#fff;text-decoration:none">Get U <span>Fit</span></a></header>
+<main>
+    <h2 th:text="${gymClass.className}"></h2>
+    <p th:text="${gymClass.classDate + ', ' + gymClass.startTime + ' - ' + gymClass.endTime + ' | Trainer: ' + trainer.trainerName}"></p>
+    <a th:href="@{/trainers/{tid}/classes(tid=${trainer.trainerID})}">Back to my classes</a>
+    <br><br>
+    <table>
+        <tr><th>#</th><th>Member</th><th>Phone</th><th>Email</th><th>Registered on</th></tr>
+        <tr th:each="r, s : ${registrations}">
+            <td th:text="${s.count}"></td>
+            <td th:text="${r.member.fullName}"></td>
+            <td th:text="${r.member.phone}"></td>
+            <td th:text="${r.member.email}"></td>
+            <td th:text="${r.registrationDate}"></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(registrations)}"><td colspan="5">No members registered yet.</td></tr>
+    </table>
+    <p th:text="${#lists.size(registrations) + ' of ' + gymClass.capacity + ' seats booked'}"></p>
+</main>
+</body>
+</html>

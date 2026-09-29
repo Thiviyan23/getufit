@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Get U Fit - Members</title>
+    <style>
+        body{margin:0;font-family:Arial,sans-serif;background:#f5f5f6;color:#111}
+        header{background:#000;color:#fff;padding:18px 40px;font-size:22px;font-weight:bold}
+        header span{color:#D4145A}
+        main{max-width:1100px;margin:32px auto;padding:0 20px}
+        table{width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden}
+        th,td{padding:14px;text-align:left;border-bottom:1px solid #eee}
+        th{background:#000;color:#fff}
+        button,.btn{background:#D4145A;color:#fff;border:0;padding:8px 16px;border-radius:20px;cursor:pointer;text-decoration:none;font-size:14px}
+        .dark{background:#000}
+        .ok{background:#e6f7ec;padding:12px;margin-bottom:16px;border-radius:6px}
+        .row{display:flex;gap:8px}
+        a{color:#D4145A}
+    </style>
+</head>
+<body>
+<header>Get U <span>Fit</span></header>
+<main>
+    <h2>Members</h2>
+    <a class="btn" th:href="@{/members/new}">Add member</a>
+    <a th:href="@{/classes}">Class schedule</a>
+    <br><br>
+    <div class="ok" th:if="${message}" th:text="${message}"></div>
+    <table>
+        <tr><th>Name</th><th>Email</th><th>Phone</th><th>Joined</th><th>Status</th><th></th></tr>
+        <tr th:each="m : ${members}">
+            <td th:text="${m.fullName}"></td>
+            <td th:text="${m.email}"></td>
+            <td th:text="${m.phone}"></td>
+            <td th:text="${m.joinDate}"></td>
+            <td th:text="${m.status}"></td>
+            <td>
+                <div class="row">
+                    <a class="btn dark" th:href="@{/members/{id}/edit(id=${m.memberID})}">Edit</a>
+                    <form method="post" th:action="@{/members/{id}/status(id=${m.memberID})}">
+                        <button type="submit" th:text="${m.status == 'Active' ? 'Deactivate' : 'Activate'}"></button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+    </table>
+</main>
+</body>
+</html>

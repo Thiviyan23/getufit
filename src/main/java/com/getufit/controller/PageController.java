@@ -70,6 +70,7 @@ public class PageController {
         return "registrations";
     }
 
+
     @PostMapping("/registrations/cancel")
     public String cancel(@RequestParam Long registrationId, @RequestParam Long memberId, RedirectAttributes ra) {
         try {

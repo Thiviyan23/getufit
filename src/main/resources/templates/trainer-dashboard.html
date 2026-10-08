@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Trainer Dashboard - Get U Fit</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:'Poppins',Arial,sans-serif;background:#000;color:#fff;min-height:100vh}
+        a{color:#D4145A;text-decoration:none}
+        header{display:flex;justify-content:space-between;align-items:center;padding:16px 40px;border-bottom:1px solid rgba(255,255,255,.08)}
+        header .logo{color:#fff;font-weight:800;font-size:20px}
+        header .logo span{color:#D4145A}
+        header form{display:inline}
+        .link{background:none;border:1px solid rgba(255,255,255,.35);color:#fff;padding:7px 18px;font-family:inherit;font-size:12px;cursor:pointer}
+        .link:hover{border-color:#fff}
+        main{max-width:1100px;margin:40px auto;padding:0 20px 60px}
+        h1{font-size:30px;font-weight:800}
+        h2{font-size:18px;margin:36px 0 14px}
+        .card{background:#0f0f10;border:1px solid rgba(255,255,255,.1);border-left:3px solid #D4145A;padding:24px;margin-top:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px}
+        .card small{display:block;color:#9a9a9f;font-size:12px}
+        .card b{font-weight:600;font-size:15px}
+        table{width:100%;border-collapse:collapse;background:#0f0f10}
+        th,td{padding:14px;text-align:left;border-bottom:1px solid rgba(255,255,255,.08);font-size:14px}
+        th{background:#1a1a1c;font-size:12px;font-weight:600;color:#9a9a9f}
+        .btn{background:#D4145A;color:#fff;padding:7px 16px;font-size:12px;font-weight:600}
+        .btn:hover{background:#b30f4a}
+        .tag{font-size:12px;color:#9a9a9f}
+        .empty{color:#9a9a9f;padding:20px;background:#0f0f10;font-size:14px}
+        .wrap{overflow-x:auto}
+    </style>
+</head>
+<body>
+<header>
+    <a class="logo" href="/landing">Get U <span>Fit</span></a>
+    <form method="post" th:action="@{/trainer/logout}"><button class="link" type="submit">Log out</button></form>
+</header>
+<main>
+    <h1>Welcome, <span th:text="${trainer.fullName}"></span></h1>
+    <div class="card">
+        <div><small>Specialization</small><b th:text="${trainer.specialization}"></b></div>
+        <div><small>Email</small><b th:text="${trainer.email}"></b></div>
+        <div><small>Phone</small><b th:text="${trainer.phone}"></b></div>
+    </div>
+
+    <h2>My classes</h2>
+    <div class="empty" th:if="${#lists.isEmpty(classes)}">No classes are assigned to you yet.</div>
+    <div class="wrap" th:unless="${#lists.isEmpty(classes)}">
+        <table>
+            <tr><th>Class</th><th>Date</th><th>Time</th><th>Type</th><th>Booked</th><th>Status</th><th></th></tr>
+            <tr th:each="c : ${classes}">
+                <td th:text="${c.className}"></td>
+                <td th:text="${c.classDate}"></td>
+                <td th:text="${c.startTime + ' - ' + c.endTime}"></td>
+                <td th:text="${c.classType}"></td>
+                <td th:text="${booked[c.classID] + ' / ' + c.capacity}"></td>
+                <td class="tag" th:text="${c.classDate.isBefore(today) ? 'Completed' : 'Upcoming'}"></td>
+                <td><a class="btn" th:href="@{/trainer/classes/{id}(id=${c.classID})}">View members</a></td>
+            </tr>
+        </table>
+    </div>
+</main>
+</body>
+</html>

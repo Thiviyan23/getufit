@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Account - Get U Fit</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:'Poppins',Arial,sans-serif;background:#000;color:#fff;min-height:100vh}
+        a{color:#D4145A;text-decoration:none}
+        header{display:flex;justify-content:space-between;align-items:center;padding:16px 40px;border-bottom:1px solid rgba(255,255,255,.08)}
+        header .logo{color:#fff;font-weight:800;font-size:20px}
+        header .logo span{color:#D4145A}
+        header form{display:inline}
+        .link{background:none;border:1px solid rgba(255,255,255,.35);color:#fff;padding:7px 18px;font-family:inherit;font-size:12px;cursor:pointer}
+        .link:hover{border-color:#fff}
+        main{max-width:1000px;margin:40px auto;padding:0 20px 60px}
+        h1{font-size:30px;font-weight:800}
+        h2{font-size:18px;margin:36px 0 14px}
+        .card{background:#0f0f10;border:1px solid rgba(255,255,255,.1);border-left:3px solid #D4145A;padding:24px;margin-top:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px}
+        .card small{display:block;color:#9a9a9f;font-size:12px}
+        .card b{font-weight:600;font-size:15px}
+        .btn{display:inline-block;background:#D4145A;color:#fff;padding:12px 26px;font-weight:700;font-size:12px;letter-spacing:.8px;text-transform:uppercase;margin-top:22px}
+        .btn:hover{background:#b30f4a}
+        table{width:100%;border-collapse:collapse;background:#0f0f10}
+        th,td{padding:14px;text-align:left;border-bottom:1px solid rgba(255,255,255,.08);font-size:14px}
+        th{background:#1a1a1c;font-size:12px;font-weight:600;color:#9a9a9f}
+        td button{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.35);padding:6px 14px;font-family:inherit;font-size:12px;cursor:pointer}
+        td button:hover{border-color:#D4145A;color:#D4145A}
+        .ok{background:rgba(255,255,255,.08);padding:12px;margin-top:20px;font-size:13px}
+        .err{background:rgba(212,20,90,.15);border:1px solid #D4145A;padding:12px;margin-top:20px;font-size:13px}
+        .empty{color:#9a9a9f;padding:20px;background:#0f0f10;font-size:14px}
+        .wrap{overflow-x:auto}
+    </style>
+</head>
+<body>
+<header>
+    <a class="logo" href="/landing">Get U <span>Fit</span></a>
+    <form method="post" th:action="@{/logout}"><button class="link" type="submit">Log out</button></form>
+</header>
+<main>
+    <h1>Welcome, <span th:text="${member.fullName}"></span></h1>
+    <div class="ok" th:if="${message}" th:text="${message}"></div>
+    <div class="err" th:if="${error}" th:text="${error}"></div>
+
+    <div class="card">
+        <div><small>Email</small><b th:text="${member.email}"></b></div>
+        <div><small>Phone</small><b th:text="${member.phone}"></b></div>
+        <div><small>Member since</small><b th:text="${member.joinDate}"></b></div>
+        <div><small>Status</small><b th:text="${member.status}"></b></div>
+    </div>
+    <a class="btn" th:href="@{/account/classes}">Browse classes</a>
+
+    <h2>My registrations</h2>
+    <div class="empty" th:if="${#lists.isEmpty(registrations)}">You have no registrations yet. Browse classes to book your first one.</div>
+    <div class="wrap" th:unless="${#lists.isEmpty(registrations)}">
+        <table>
+            <tr><th>Class</th><th>Date</th><th>Time</th><th>Status</th><th></th></tr>
+            <tr th:each="r : ${registrations}">
+                <td th:text="${r.gymClass.className}"></td>
+                <td th:text="${r.gymClass.classDate}"></td>
+                <td th:text="${r.gymClass.startTime + ' - ' + r.gymClass.endTime}"></td>
+                <td th:text="${r.status}"></td>
+                <td>
+                    <form th:if="${r.status == 'Registered'}" method="post" th:action="@{/account/registrations/cancel}">
+                        <input type="hidden" name="registrationId" th:value="${r.registrationID}">
+                        <button type="submit">Cancel</button>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+</main>
+</body>
+</html>

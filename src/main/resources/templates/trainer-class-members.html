@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Class Members - Get U Fit</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:'Poppins',Arial,sans-serif;background:#000;color:#fff;min-height:100vh}
+        a{color:#D4145A;text-decoration:none}
+        header{display:flex;justify-content:space-between;align-items:center;padding:16px 40px;border-bottom:1px solid rgba(255,255,255,.08)}
+        header .logo{color:#fff;font-weight:800;font-size:20px}
+        header .logo span{color:#D4145A}
+        header form{display:inline}
+        .link{background:none;border:1px solid rgba(255,255,255,.35);color:#fff;padding:7px 18px;font-family:inherit;font-size:12px;cursor:pointer}
+        .link:hover{border-color:#fff}
+        main{max-width:1000px;margin:40px auto;padding:0 20px 60px}
+        h1{font-size:28px;font-weight:800;margin:10px 0 6px}
+        .sub{color:#9a9a9f;font-size:14px;margin-bottom:24px}
+        table{width:100%;border-collapse:collapse;background:#0f0f10}
+        th,td{padding:14px;text-align:left;border-bottom:1px solid rgba(255,255,255,.08);font-size:14px}
+        th{background:#1a1a1c;font-size:12px;font-weight:600;color:#9a9a9f}
+        .count{margin-top:16px;color:#9a9a9f;font-size:13px}
+        .wrap{overflow-x:auto}
+    </style>
+</head>
+<body>
+<header>
+    <a class="logo" href="/landing">Get U <span>Fit</span></a>
+    <form method="post" th:action="@{/trainer/logout}"><button class="link" type="submit">Log out</button></form>
+</header>
+<main>
+    <a th:href="@{/trainer}">&larr; My classes</a>
+    <h1 th:text="${gymClass.className}"></h1>
+    <p class="sub" th:text="${gymClass.classDate + ', ' + gymClass.startTime + ' - ' + gymClass.endTime}"></p>
+    <div class="wrap">
+        <table>
+            <tr><th>#</th><th>Member</th><th>Phone</th><th>Email</th><th>Registered on</th></tr>
+            <tr th:each="r, s : ${registrations}">
+                <td th:text="${s.count}"></td>
+                <td th:text="${r.member.fullName}"></td>
+                <td th:text="${r.member.phone}"></td>
+                <td th:text="${r.member.email}"></td>
+                <td th:text="${r.registrationDate}"></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(registrations)}"><td colspan="5">No members registered yet.</td></tr>
+        </table>
+    </div>
+    <p class="count" th:text="${#lists.size(registrations) + ' of ' + gymClass.capacity + ' seats booked'}"></p>
+</main>
+</body>
+</html>

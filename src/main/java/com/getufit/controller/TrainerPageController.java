@@ -6,6 +6,7 @@ import com.getufit.repository.TrainerRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,13 +15,34 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Controller
 @RequestMapping("/trainers")
 @RequiredArgsConstructor
 public class TrainerPageController {
+    private static final List<String> SPECIALIZATIONS = List.of(
+            "Strength & Conditioning",
+            "Weight Loss",
+            "Cardio & HIIT",
+            "Yoga",
+            "Pilates",
+            "Zumba & Dance Fitness",
+            "Women's Fitness",
+            "Bodybuilding",
+            "CrossFit",
+            "Personal Training",
+            "Nutrition & Diet"
+    );
+
     private final TrainerRepository trainers;
     private final GymClassRepository classes;
+    private final PasswordEncoder encoder;
+
+    @ModelAttribute("specializations")
+    public List<String> specializations() {
+        return SPECIALIZATIONS;
+    }
 
     @GetMapping
     public String list(Model model) {
@@ -37,14 +59,25 @@ public class TrainerPageController {
 
     @PostMapping("/new")
     public String create(@Valid @ModelAttribute("trainer") Trainer trainer, BindingResult result,
+                         @RequestParam(required = false) String password,
                          Model model, RedirectAttributes ra) {
+        trainer.setTrainerID(null);
         if (trainer.getEmail() != null && trainers.existsByEmail(trainer.getEmail())) {
             result.rejectValue("email", "duplicate", "Email is already registered");
         }
-        if (result.hasErrors()) {
+        if (trainer.getSpecialization() != null && !trainer.getSpecialization().isBlank()
+                && !SPECIALIZATIONS.contains(trainer.getSpecialization())) {
+            result.rejectValue("specialization", "invalid", "Choose a specialization from the list");
+        }
+        boolean weak = password == null || password.length() < 6 || password.length() > 72;
+        if (weak) {
+            model.addAttribute("passwordError", "Password must be 6 to 72 characters");
+        }
+        if (result.hasErrors() || weak) {
             model.addAttribute("isNew", true);
             return "trainer-form";
         }
+        trainer.setPasswordHash(encoder.encode(password));
         trainer.setStatus("Active");
         trainers.save(trainer);
         ra.addFlashAttribute("message", "Trainer added");
@@ -63,23 +96,37 @@ public class TrainerPageController {
 
     @PostMapping("/{id}/edit")
     public String update(@PathVariable Long id, @Valid @ModelAttribute("trainer") Trainer form,
-                         BindingResult result, Model model, RedirectAttributes ra) {
+                         BindingResult result, @RequestParam(required = false) String password,
+                         Model model, RedirectAttributes ra) {
+        Trainer trainer = trainers.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         if (form.getEmail() != null && trainers.existsByEmailAndTrainerIDNot(form.getEmail(), id)) {
             result.rejectValue("email", "duplicate", "Email is already registered");
         }
-        if (result.hasErrors()) {
+        String spec = form.getSpecialization();
+        boolean unchanged = spec != null && spec.equals(trainer.getSpecialization());
+        if (spec != null && !spec.isBlank() && !unchanged && !SPECIALIZATIONS.contains(spec)) {
+            result.rejectValue("specialization", "invalid", "Choose a specialization from the list");
+        }
+        boolean newPassword = password != null && !password.isBlank();
+        boolean weak = newPassword && (password.length() < 6 || password.length() > 72);
+        if (weak) {
+            model.addAttribute("passwordError", "Password must be 6 to 72 characters");
+        }
+        if (result.hasErrors() || weak) {
             model.addAttribute("trainerId", id);
             model.addAttribute("isNew", false);
             return "trainer-form";
         }
-        Trainer trainer = trainers.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         trainer.setTrainerName(form.getTrainerName());
         trainer.setPhone(form.getPhone());
         trainer.setEmail(form.getEmail());
         trainer.setSpecialization(form.getSpecialization());
+        if (newPassword) {
+            trainer.setPasswordHash(encoder.encode(password));
+        }
         trainers.save(trainer);
-        ra.addFlashAttribute("message", "Trainer updated");
+        ra.addFlashAttribute("message", newPassword ? "Trainer updated and password reset" : "Trainer updated");
         return "redirect:/trainers";
     }
 

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Get U Fit - Class</title>
+    <style>
+        body{margin:0;font-family:Arial,sans-serif;background:#f5f5f6;color:#111}
+        header{background:#000;color:#fff;padding:18px 40px;font-size:22px;font-weight:bold}
+        header span{color:#D4145A}
+        main{max-width:560px;margin:32px auto;padding:0 20px}
+        form{background:#fff;padding:28px;border-radius:8px}
+        label{display:block;margin-top:16px;font-weight:bold}
+        input,select{width:100%;padding:10px;margin-top:6px;box-sizing:border-box;border:1px solid #ccc;border-radius:6px}
+        .two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+        button{background:#D4145A;color:#fff;border:0;padding:12px 24px;border-radius:24px;cursor:pointer;margin-top:24px}
+        .e{color:#a80f47;font-size:13px}
+        a{color:#D4145A}
+    </style>
+</head>
+<body>
+<header><a href="/" style="color:#fff;text-decoration:none">Get U <span>Fit</span></a></header>
+<main>
+    <h2 th:text="${isNew} ? 'Schedule new class' : 'Edit class'"></h2>
+    <form method="post" th:object="${gymClass}"
+          th:action="${isNew} ? @{/schedule/new} : @{/schedule/{id}/edit(id=${classId})}">
+        <label>Class name</label>
+        <input type="text" th:field="*{className}" placeholder="e.g. Morning Yoga">
+        <span class="e" th:if="${#fields.hasErrors('className')}" th:errors="*{className}"></span>
+
+        <label>Class type</label>
+        <select th:field="*{classType}">
+            <option value="">Select type</option>
+            <option th:each="t : ${classTypes}" th:value="${t}" th:text="${t}"></option>
+            <option th:if="${gymClass.classType != null and !gymClass.classType.isBlank() and !classTypes.contains(gymClass.classType)}"
+                    th:value="${gymClass.classType}" th:text="${gymClass.classType}"></option>
+        </select>
+        <span class="e" th:if="${#fields.hasErrors('classType')}" th:errors="*{classType}"></span>
+
+        <label>Trainer</label>
+        <select th:field="*{trainerID}">
+            <option value="">Select trainer</option>
+            <option th:each="t : ${trainerList}" th:value="${t.trainerID}"
+                    th:text="${t.trainerName + ' - ' + t.specialization + (t.status != 'Active' ? ' (Inactive)' : '')}"></option>
+        </select>
+        <span class="e" th:if="${#fields.hasErrors('trainerID')}" th:errors="*{trainerID}"></span>
+
+        <label>Date</label>
+        <input type="date" th:field="*{classDate}">
+        <span class="e" th:if="${#fields.hasErrors('classDate')}" th:errors="*{classDate}"></span>
+
+        <div class="two">
+            <div>
+                <label>Start time</label>
+                <input type="time" th:field="*{startTime}">
+                <span class="e" th:if="${#fields.hasErrors('startTime')}" th:errors="*{startTime}"></span>
+            </div>
+            <div>
+                <label>End time</label>
+                <input type="time" th:field="*{endTime}">
+                <span class="e" th:if="${#fields.hasErrors('endTime')}" th:errors="*{endTime}"></span>
+            </div>
+        </div>
+
+        <label>Capacity</label>
+        <input type="number" th:field="*{capacity}" min="1">
+        <span class="e" th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}"></span>
+
+        <button type="submit">Save</button>
+        <a th:href="@{/schedule}">Cancel</a>
+    </form>
+</main>
+</body>
+</html>

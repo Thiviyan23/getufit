@@ -1,5 +1,6 @@
 package com.getufit.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
@@ -24,5 +25,7 @@ public class Trainer {
     @NotBlank(message = "Specialization is required")
     @Size(max = 100)
     private String specialization;
+    @JsonIgnore
+    private String passwordHash;
     private String status;
 }

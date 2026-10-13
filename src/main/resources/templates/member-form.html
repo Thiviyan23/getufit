@@ -46,10 +46,35 @@
         <input type="text" th:field="*{email}">
         <span class="e" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
         <div th:if="${isNew}">
+
             <label>Password</label>
             <input type="password" name="password">
             <span class="e" th:if="${passwordError}" th:text="${passwordError}"></span>
+
+            <label>Membership Package</label>
+            <select name="packageId" id="packageSelect" onchange="updatePrice()">
+                <option value="">Select a package</option>
+                <option th:each="p : ${packages}" th:value="${p.packageID}" th:text="${p.packageName + ' - ' + p.durationMonths + ' months'}" th:attr="data-price=${p.price}"></option>
+            </select>
+            <span class="e" th:if="${packageError}" th:text="${packageError}"></span>
+            <p id="priceDisplay" style="margin-top:8px;font-weight:bold;color:#D4145A;"></p>
+
+            <label>Payment Method</label>
+            <select name="paymentType">
+                <option value="Cash">Cash</option>
+                <option value="Card">Card</option>
+                <option value="Bank Transfer">Bank Transfer</option>
+            </select>
+
         </div>
+        <script>
+            function updatePrice(){
+                var sel = document.getElementById('packageSelect');
+                var opt = sel.options[sel.selectedIndex];
+                var price = opt.getAttribute('data-price');
+                document.getElementById('priceDisplay').innerText = price ? ('Price: LKR ' + price) : '';
+            }
+        </script>
         <button type="submit">Save</button>
         <a th:href="@{/members}">Cancel</a>
     </form>

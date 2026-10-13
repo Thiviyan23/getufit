@@ -19,7 +19,7 @@
     </style>
 </head>
 <body>
-<header>Get U <span>Fit</span></header>
+<header><a href="/" style="color:inherit;text-decoration:none">Get U <span>Fit</span></a></header>
 <main>
     <h2>Members</h2>
     <a class="btn" th:href="@{/members/new}">Add member</a>
@@ -27,12 +27,13 @@
     <br><br>
     <div class="ok" th:if="${message}" th:text="${message}"></div>
     <table>
-        <tr><th>Name</th><th>Email</th><th>Phone</th><th>Joined</th><th>Status</th><th></th></tr>
+        <tr><th>ID</th><th>Name</th><th>Email</th><th>Package</th><th>Price</th><th>Status</th><th></th></tr>
         <tr th:each="m : ${members}">
+            <td th:text="${m.memberID}"></td>
             <td th:text="${m.fullName}"></td>
             <td th:text="${m.email}"></td>
-            <td th:text="${m.phone}"></td>
-            <td th:text="${m.joinDate}"></td>
+            <td th:text="${membershipMap[m.memberID] != null ? membershipMap[m.memberID].plan.packageName : 'No package'}"></td>
+            <td th:text="${membershipMap[m.memberID] != null ? membershipMap[m.memberID].plan.price : '-'}"></td>
             <td th:text="${m.status}"></td>
             <td>
                 <div class="row">

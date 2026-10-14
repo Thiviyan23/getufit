@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Get U Fit - Member Portal</title>
+    <style>
+        body{margin:0;font-family:Arial,sans-serif;background:#f5f5f6;color:#111}
+        header{background:#000;color:#fff;padding:18px 40px;font-size:22px;font-weight:bold}
+        header span{color:#D4145A}
+        .hero{background:#000;color:#fff;padding:64px 40px;text-align:center}
+        .hero h1{font-size:38px;margin:0 0 12px}
+        .hero p{color:#ccc;max-width:560px;margin:0 auto 28px}
+        .hero select{padding:12px;border-radius:24px;border:0;min-width:260px;font-size:15px}
+        main{max-width:1000px;margin:0 auto;padding:20px 20px 60px}
+        h2{margin:40px 0 16px}
+        .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+        .card{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.06);border-top:4px solid #D4145A}
+        .card h3{margin:0 0 10px}
+        .card p{margin:4px 0;color:#555;font-size:14px}
+        .big{font-size:22px;font-weight:bold;color:#D4145A !important}
+        .btn{display:inline-block;background:#D4145A;color:#fff;text-decoration:none;padding:10px 22px;border-radius:20px;margin:8px 8px 0 0}
+        .btn.dark{background:#000}
+        table{width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden}
+        th,td{padding:14px;text-align:left;border-bottom:1px solid #eee}
+        th{background:#000;color:#fff}
+        .empty{background:#fff;padding:20px;border-radius:8px;color:#666}
+    </style>
+</head>
+<body>
+<header><a href="/member" style="color:inherit;text-decoration:none">Get U <span>Fit</span></a></header>
+
+<div class="hero">
+    <h1 th:text="${member != null ? 'Welcome back, ' + member.fullName : 'Welcome to Get U Fit'}"></h1>
+    <p>Book classes, track your membership and meet your trainers.</p>
+    <form method="get" action="/member">
+        <select name="memberId" onchange="this.form.submit()">
+            <option value="">Select your name</option>
+            <option th:each="m : ${members}" th:value="${m.memberID}" th:text="${m.fullName}" th:selected="${m.memberID == memberId}"></option>
+        </select>
+    </form>
+</div>
+
+<main>
+    <div th:if="${member != null}">
+        <h2>My account</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>My Membership</h3>
+                <div th:if="${membership != null}">
+                    <p class="big" th:text="${membership.plan.packageName}"></p>
+                    <p th:text="'LKR ' + ${membership.plan.price} + ' for ' + ${membership.plan.durationMonths} + ' month(s)'"></p>
+                    <p th:text="'Valid ' + ${membership.startDate} + ' to ' + ${membership.endDate}"></p>
+                    <p th:text="'Status: ' + ${membership.status}"></p>
+                </div>
+                <p th:if="${membership == null}">No membership found.</p>
+            </div>
+            <div class="card">
+                <h3>Quick actions</h3>
+                <a class="btn" th:href="@{/classes(memberId=${memberId})}">Browse classes</a>
+                <a class="btn dark" th:href="@{/registrations(memberId=${memberId})}">My registrations</a>
+            </div>
+        </div>
+
+        <h2>My upcoming classes</h2>
+        <table th:if="${!upcoming.isEmpty()}">
+            <tr><th>Class</th><th>Trainer</th><th>Date</th><th>Time</th><th>Type</th></tr>
+            <tr th:each="r : ${upcoming}">
+                <td th:text="${r.gymClass.className}"></td>
+                <td th:text="${trainerNames[r.gymClass.trainerID]}"></td>
+                <td th:text="${r.gymClass.classDate}"></td>
+                <td th:text="${r.gymClass.startTime + ' - ' + r.gymClass.endTime}"></td>
+                <td th:text="${r.gymClass.classType}"></td>
+            </tr>
+        </table>
+        <div class="empty" th:if="${upcoming.isEmpty()}">No upcoming classes yet. Browse classes to book one.</div>
+    </div>
+
+    <h2>Our trainers</h2>
+    <div class="grid">
+        <div class="card" th:each="t : ${trainers}" th:if="${t.status == 'Active'}">
+            <h3 th:text="${t.trainerName}"></h3>
+            <p th:text="${t.specialization}"></p>
+        </div>
+    </div>
+</main>
+</body>
+</html>

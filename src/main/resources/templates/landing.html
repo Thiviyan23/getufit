@@ -12,8 +12,10 @@
             --black:#000;
             --white:#fff;
             --red:#D4145A;
-            --red-dark:#b30f4a;
+            --red-dark: #b30f4a;
             --muted:#9a9a9f;
+            --panel:#0d0d0f;
+            --line:rgba(255,255,255,.1);
             /* Put your gym photo here, e.g. url('images/hero.jpg') */
             --hero-img:none;
         }
@@ -45,7 +47,8 @@
         .btn-red{background:var(--red);color:var(--white);border:1px solid var(--red)}
         .btn-red:hover{background:var(--red-dark);border-color:var(--red-dark)}
         .btn-outline{background:transparent;color:var(--white);border:1px solid rgba(255,255,255,.45)}
-        .btn-outline:hover{border-color:var(--white);background:rgba(255,255,255,.08)}
+        .btn-outline:hover{border-color:var(--white);background: rgb(8 53 129 / 0.08)
+        }
         .nav .btn{font-size:10.5px;padding:10px 22px}
 
         .burger{display:none;background:none;border:0;cursor:pointer;width:40px;height:40px;position:relative}
@@ -84,11 +87,66 @@
         .scroll i{display:block;width:1px;height:34px;background:linear-gradient(var(--red),transparent);animation:drop 2s ease-in-out infinite}
         @keyframes drop{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
 
+        /* ---------- Sections ---------- */
+        .section{padding:110px 0;scroll-margin-top:60px}
+        .wrap{max-width:1440px;margin:0 auto;padding:0 56px}
+        h2{font-size:clamp(32px,3.6vw,48px);font-weight:800;line-height:1.1;letter-spacing:-1px;max-width:560px}
+        .sub{margin-top:18px;max-width:520px;font-size:14px;line-height:1.85;color:var(--muted)}
+
+        /* About */
+        .about{background:var(--panel);border-top:1px solid var(--line)}
+        .about .wrap{display:grid;grid-template-columns:1.1fr 1fr;gap:80px;align-items:start}
+        .about p+p{margin-top:16px}
+        .checks{list-style:none;border-top:1px solid var(--line)}
+        .checks li{display:flex;align-items:center;gap:18px;padding:22px 0;border-bottom:1px solid var(--line);font-size:15px;font-weight:600}
+        .checks li::before{content:"";flex:none;width:10px;height:10px;background:var(--red)}
+
+        /* Classes */
+        .classes-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:56px}
+        .grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}
+        .card{padding:38px 32px 42px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);transition:background .25s}
+        .card:hover{background:var(--panel)}
+        .card .ico{font-size:30px;line-height:1;display:block;margin-bottom:26px}
+        .card h3{font-size:18px;font-weight:700;margin-bottom:10px}
+        .card p{font-size:13.5px;line-height:1.8;color:var(--muted)}
+        .card.women{background:var(--red)}
+        .card.women:hover{background:var(--red-dark)}
+        .card.women p{color:rgba(255,255,255,.88)}
+
+        /* Memberships */
+        .plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));margin-top:56px;border-top:1px solid var(--line);border-left:1px solid var(--line)}
+        .plan{display:flex;flex-direction:column;padding:34px 28px 30px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+        .plan h3{font-size:18px;font-weight:700}
+        .plan .dur{margin-top:2px;font-size:13px;color:var(--muted)}
+        .plan .price{margin-top:26px;font-size:30px;font-weight:800;letter-spacing:-.5px;line-height:1.1}
+        .plan .price small{display:block;margin-top:6px;font-size:12px;font-weight:500;letter-spacing:0;color:var(--muted)}
+        .plan p{margin:22px 0 28px;font-size:13.5px;line-height:1.8;color:var(--muted);flex:1}
+        .plan .btn{justify-content:center;font-size:11px;padding:13px 20px}
+        .plan.best{background:var(--red)}
+        .plan.best .dur,.plan.best .price small,.plan.best p{color:rgba(255,255,255,.88)}
+        .plan.best .btn{background:var(--white);border-color:var(--white);color:var(--black)}
+        .plan.best .btn:hover{background:#eee}
+
+        /* Contact */
+        .contact{background:var(--panel);border-top:1px solid var(--line)}
+        .contact .wrap{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+        .info{border-top:1px solid var(--line)}
+        .info>div{padding:26px 0;border-bottom:1px solid var(--line)}
+        .info h3{font-size:13px;font-weight:600;color:var(--red);margin-bottom:8px}
+        .info address,.info a.tel{font-style:normal;font-size:17px;font-weight:600;line-height:1.6}
+        .info a.tel:hover{color:var(--red)}
+        .info .btn{margin-top:18px;font-size:11px;padding:13px 26px}
+
+        footer{padding:28px 56px;border-top:1px solid var(--line);font-size:12px;color:var(--muted);text-align:center}
+
         /* ---------- Responsive ---------- */
         @media (max-width:1024px){
             .nav-inner{padding:16px 28px}
             .menu{gap:22px}
             .hero-inner{padding:130px 28px 150px}
+            .wrap{padding:0 28px}
+            .grid{grid-template-columns:repeat(2,1fr)}
+            .about .wrap,.contact .wrap{gap:48px}
         }
         @media (max-width:860px){
             .burger{display:block}
@@ -100,6 +158,12 @@
             .hero::before{left:10px}
             .hero-inner{padding:120px 24px 140px}
             .lead{font-size:13.5px}
+            .section{padding:80px 0}
+            .about .wrap,.contact .wrap{grid-template-columns:1fr}
+        }
+        @media (max-width:560px){
+            .grid{grid-template-columns:1fr}
+            .wrap{padding:0 20px}
         }
         @media (max-width:480px){
             .nav .btn{padding:9px 14px}
@@ -127,7 +191,6 @@
                 <li><a href="#home" class="active">Home</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#memberships">Memberships</a></li>
-
                 <li><a href="#classes">Classes</a></li>
                 <li><a href="#trainers">Trainers</a></li>
                 <li><a href="#location">Location</a></li>
@@ -137,9 +200,7 @@
 
         <div class="nav-actions">
             <a href="/login" class="btn-login">Login</a>
-<!--            <a href="#memberships" class="btn btn-red">Join Now</a>-->
-           <!-- <a href="/members/new" class="btn btn-red">Join Now -->
-                <a href="/join" class="btn btn-red">Join Now <span aria-hidden="true">&rarr;</span></a>
+            <a href="/join" class="btn btn-red">Join Now <span aria-hidden="true">&rarr;</span></a>
             <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><span></span></button>
         </div>
     </div>
@@ -159,19 +220,103 @@
         <a href="#about" class="scroll" aria-label="Scroll to About"><span>Scroll</span><i></i></a>
     </section>
 
-    <!-- Add your next sections below, using these ids so the navbar links work -->
-    <!-- <section id="about"></section> -->
-    <!-- <section id="memberships"></section> -->
-    <!-- <section id="classes"></section> -->
+    <section class="section about" id="about">
+        <div class="wrap">
+            <div>
+                <h2>A Gym Built Around Your Goals</h2>
+                <p class="sub">Get U Fit is an established fitness centre located in Colombo, Sri Lanka. We offer a comprehensive range of gym facilities, group fitness classes, and one-on-one trainer support, all under one roof.</p>
+                <p class="sub">Whether you're just starting your fitness journey or looking to take your performance to the next level, our team and facilities are here to support every step of the way.</p>
+            </div>
+            <ul class="checks">
+                <li>Professional gym facilities and equipment</li>
+                <li>Diverse group fitness class schedule</li>
+                <li>Certified personal trainers</li>
+                <li>Dedicated women's fitness programme</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="section" id="classes">
+        <div class="wrap">
+            <div class="classes-head">
+                <h2>Classes for Every Goal</h2>
+                <a href="#contact" class="btn btn-outline" style="font-size:11px;padding:13px 26px">View All Classes</a>
+            </div>
+            <div class="grid">
+                <article class="card"><span class="ico" aria-hidden="true">🏋️</span><h3>Strength Training</h3><p>Build muscle and increase power through structured resistance and weight training programmes.</p></article>
+                <article class="card"><span class="ico" aria-hidden="true">🔥</span><h3>Weight Loss</h3><p>High-energy cardio and interval sessions designed to accelerate fat loss and improve endurance.</p></article>
+                <article class="card"><span class="ico" aria-hidden="true">🏃</span><h3>Fitness Training</h3><p>General conditioning classes covering agility, stamina, and full-body functional fitness.</p></article>
+                <article class="card"><span class="ico" aria-hidden="true">🎯</span><h3>Personal Training</h3><p>One-on-one sessions with a certified trainer tailored to your specific goals and fitness level.</p></article>
+                <article class="card"><span class="ico" aria-hidden="true">🧘</span><h3>Yoga</h3><p>Improve flexibility, balance, and mental wellbeing through guided yoga and mindfulness sessions.</p></article>
+                <article class="card women"><span class="ico" aria-hidden="true">👩</span><h3>Women's Special Classes</h3><p>A dedicated programme of fitness classes designed exclusively for women in a supportive environment.</p></article>
+            </div>
+        </div>
+    </section>
+
+    <section class="section about" id="memberships">
+        <div class="wrap">
+            <h2>Membership Packages</h2>
+            <p class="sub">Pick the plan that fits your schedule. Longer plans cost less per month.</p>
+            <div class="plans" id="plans"></div>
+        </div>
+    </section>
+
+    <!-- Add this section later, using this id so the navbar link works -->
     <!-- <section id="trainers"></section> -->
-    <!-- <section id="location"></section> -->
-    <!-- <section id="contact"></section> -->
+
+    <section class="section contact" id="contact">
+        <div class="wrap">
+            <div>
+                <h2>Get in Touch</h2>
+                <p class="sub">Have a question about memberships, classes, or joining? Our team is happy to help. Reach out below or visit us at the gym.</p>
+            </div>
+            <div class="info">
+                <div id="location" style="scroll-margin-top:120px">
+                    <h3>Find us</h3>
+                    <address>195 2/3, Galle - Colombo Rd,<br>Colombo 4, Colombo 00400, Sri Lanka</address>
+                    <a class="btn btn-outline" href="https://www.google.com/maps/place/Get+U+Fit+Gym/@6.8893828,79.854483,17z/data=!4m6!3m5!1s0x3ae25bdc9747f611:0xeb6882fef3d01b83!8m2!3d6.8893828!4d79.857045" target="_blank" rel="noopener">Get directions</a>
+                </div>
+                <div>
+                    <h3>Call us</h3>
+                    <a class="tel" href="tel:+94112503339">011 250 3339</a>
+                </div>
+            </div>
+        </div>
+    </section>
 </main>
+
+<footer>&copy; <span id="yr"></span> Get U Fit Gym, Colombo</footer>
 
 <script>
     const nav = document.getElementById('nav');
     const burger = document.getElementById('burger');
     const menu = document.getElementById('menu');
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    // Data from the membership table. To load it live instead, replace this array
+    // with: const packages = await (await fetch('/api/memberships')).json();
+    const packages = [
+        {PackageName:'Basic',    DurationMonths:1,  Price:5000.00,  Description:'Basic gym membership package',    Status:'Active'},
+        {PackageName:'Standard', DurationMonths:3,  Price:13500.00, Description:'Standard gym membership package', Status:'Active'},
+        {PackageName:'Premium',  DurationMonths:6,  Price:24000.00, Description:'Premium gym membership package',  Status:'Active'},
+        {PackageName:'Annual',   DurationMonths:12, Price:45000.00, Description:'Annual gym membership package',   Status:'Active'},
+        {PackageName:'Student',  DurationMonths:3,  Price:10000.00, Description:'Special package for students',    Status:'Active'}
+    ];
+    const fmt = n => 'Rs. ' + Math.round(n).toLocaleString('en-LK');
+    const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    const active = packages.filter(p => p.Status === 'Active');
+    const bestMonthly = Math.min(...active.map(p => p.Price / p.DurationMonths));
+    document.getElementById('plans').innerHTML = active.map(p => {
+        const monthly = p.Price / p.DurationMonths;
+        const dur = p.DurationMonths === 12 ? '12 months' : p.DurationMonths + (p.DurationMonths === 1 ? ' month' : ' months');
+        return `<article class="plan${monthly === bestMonthly ? ' best' : ''}">
+            <h3>${esc(p.PackageName)}</h3>
+            <div class="dur">${dur}</div>
+            <div class="price">${fmt(p.Price)}${p.DurationMonths > 1 ? `<small>${fmt(monthly)} per month</small>` : '<small>per month</small>'}</div>
+            <p>${esc(p.Description)}</p>
+            <a href="/join" class="btn btn-outline">Join now</a>
+        </article>`;
+    }).join('');
 
     const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 40);
     onScroll();

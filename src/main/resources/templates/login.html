@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Member Login - Get U Fit</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:'Poppins',Arial,sans-serif;background:#000;color:#fff;min-height:100vh;display:flex;flex-direction:column}
+        a{color:#D4145A;text-decoration:none}
+        header{padding:18px 40px;border-bottom:1px solid rgba(255,255,255,.08)}
+        header a{color:#fff;font-weight:800;font-size:20px}
+        header span{color:#D4145A}
+        main{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 20px}
+        .box{width:100%;max-width:420px;background:#0f0f10;border:1px solid rgba(255,255,255,.1);border-left:3px solid #D4145A;padding:36px}
+        h1{font-size:28px;font-weight:800}
+        .sub{color:#9a9a9f;font-size:13px;margin:6px 0 20px}
+        label{display:block;margin-top:16px;font-size:13px;font-weight:600}
+        input{width:100%;margin-top:6px;padding:12px;background:#000;color:#fff;border:1px solid rgba(255,255,255,.25);font-family:inherit;font-size:14px}
+        input:focus{outline:2px solid #D4145A;border-color:#D4145A}
+        button{width:100%;margin-top:24px;background:#D4145A;color:#fff;border:0;padding:14px;font-family:inherit;font-weight:700;font-size:12px;letter-spacing:.8px;text-transform:uppercase;cursor:pointer}
+        button:hover{background:#b30f4a}
+        .err{background:rgba(212,20,90,.15);border:1px solid #D4145A;padding:12px;font-size:13px;margin-bottom:4px}
+        .ok{background:rgba(255,255,255,.08);padding:12px;font-size:13px;margin-bottom:4px}
+        .note{margin-top:20px;font-size:13px;color:#9a9a9f;text-align:center}
+    </style>
+</head>
+<body>
+<header><a href="/landing">Get U <span>Fit</span></a></header>
+<main>
+    <div class="box">
+        <h1>Member login</h1>
+        <p class="sub">Sign in to book classes and manage your registrations.</p>
+        <div class="ok" th:if="${param.logout}">You have been logged out.</div>
+        <div class="err" th:if="${error}" th:text="${error}"></div>
+        <form method="post" th:action="@{/login}">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" th:value="${email}" required autofocus>
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" required>
+            <button type="submit">Log in</button>
+        </form>
+        <p class="note">New here? <a href="/join">Join Get U Fit</a></p>
+    </div>
+</main>
+</body>
+</html>

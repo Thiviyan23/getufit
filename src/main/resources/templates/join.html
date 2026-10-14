@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Join Get U Fit</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:'Poppins',Arial,sans-serif;background:#000;color:#fff;min-height:100vh}
+        a{color:#D4145A;text-decoration:none}
+        header{padding:18px 40px;border-bottom:1px solid rgba(255,255,255,.08)}
+        header a{color:#fff;font-weight:800;font-size:20px}
+        header span{color:#D4145A}
+        main{max-width:720px;margin:48px auto;padding:0 20px 60px}
+        h1{font-size:34px;font-weight:800;letter-spacing:-.5px}
+        .sub{color:#9a9a9f;font-size:14px;margin:8px 0 28px}
+        form{background:#0f0f10;border:1px solid rgba(255,255,255,.1);border-left:3px solid #D4145A;padding:32px}
+        .grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 20px}
+        .full{grid-column:1/-1}
+        label{display:block;margin-top:16px;font-size:13px;font-weight:600}
+        input,select{width:100%;margin-top:6px;padding:12px;background:#000;color:#fff;border:1px solid rgba(255,255,255,.25);font-family:inherit;font-size:14px}
+        input:focus,select:focus{outline:2px solid #D4145A;border-color:#D4145A}
+        .e{display:block;color:#ff6b9a;font-size:12px;margin-top:4px}
+        button{margin-top:28px;background:#D4145A;color:#fff;border:0;padding:15px 34px;font-family:inherit;font-weight:700;font-size:12px;letter-spacing:.8px;text-transform:uppercase;cursor:pointer}
+        button:hover{background:#b30f4a}
+        .note{margin-top:18px;font-size:12px;color:#9a9a9f}
+        @media (max-width:600px){.grid{grid-template-columns:1fr}form{padding:22px}}
+    </style>
+</head>
+<body>
+<header><a href="/landing">Get U <span>Fit</span></a></header>
+<main>
+    <h1>Join Get U Fit</h1>
+    <p class="sub">Fill in your details. Our staff will activate your membership after reviewing your application.</p>
+
+    <form method="post" th:action="@{/join}" th:object="${joinForm}" novalidate>
+        <div class="grid">
+            <div class="full">
+                <label for="fullName">Full name</label>
+                <input id="fullName" type="text" th:field="*{fullName}">
+                <span class="e" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></span>
+            </div>
+
+            <div>
+                <label for="dob">Date of birth</label>
+                <input id="dob" type="date" th:field="*{dob}">
+                <span class="e" th:if="${#fields.hasErrors('dob')}" th:errors="*{dob}"></span>
+            </div>
+
+            <div>
+                <label for="gender">Gender</label>
+                <select id="gender" th:field="*{gender}">
+                    <option value="">Select</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+                <span class="e" th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}"></span>
+            </div>
+
+            <div class="full">
+                <label for="address">Address</label>
+                <input id="address" type="text" th:field="*{address}">
+                <span class="e" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>
+            </div>
+
+            <div>
+                <label for="phone">Phone</label>
+                <input id="phone" type="text" th:field="*{phone}" placeholder="0771234567">
+                <span class="e" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></span>
+            </div>
+
+            <div>
+                <label for="email">Email</label>
+                <input id="email" type="email" th:field="*{email}">
+                <span class="e" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+            </div>
+
+            <div>
+                <label for="password">Password</label>
+                <input id="password" type="password" th:field="*{password}">
+                <span class="e" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+            </div>
+
+            <div>
+                <label for="confirmPassword">Confirm password</label>
+                <input id="confirmPassword" type="password" th:field="*{confirmPassword}">
+                <span class="e" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></span>
+            </div>
+        </div>
+
+        <button type="submit">Submit application</button>
+        <p class="note">Already a member? <a href="/login">Log in</a></p>
+    </form>
+</main>
+</body>
+</html>
